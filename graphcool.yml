@@ -16,7 +16,14 @@ functions:
     schema: src/authenticate.graphql
     handler:
       code: 
-        src: src/authenticate.js    
+        src: src/authenticate.js   
+
+rootTokens:
+  - signup
+  - authenticate 
+
+# These permissions are very permissive
+# They should be locked down when possible
 
 permissions:
   # Subforum Permissions
@@ -37,7 +44,9 @@ permissions:
   - operation: Comment.update
   - operation: Comment.delete
 
-rootTokens:
-  - signup
-  - authenticate
+  # Relation Permissions
+  - operation: SubforumToPost.connect
+  - operation: SubforumToPost.disconnect
 
+  - operation: PostToComment.connect
+  - operation: PostToComment.disconnect
