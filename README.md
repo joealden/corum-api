@@ -1,2 +1,2 @@
 # corum-api
-The GraphQL API for Corum built using the Graphcool Framework.
+The API for Corum built using the Graphcool Framework.
