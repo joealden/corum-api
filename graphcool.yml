@@ -28,12 +28,6 @@ functions:
       
 
 permissions:
-  # User Permissions
-  - operation: User.create
-  - operation: User.read
-  - operation: User.update
-  - operation: User.delete
-
   # Subforum Permissions
   - operation: Subforum.create
   - operation: Subforum.read

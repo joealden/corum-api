@@ -1,8 +1,10 @@
 type User @model {
 	id: ID! @isUnique
+	createdAt: DateTime!
+	updatedAt: DateTime!
 	email: String! @isUnique
 	password: String!
-	username: String!
+	username: String
 }
 
 type Subforum @model {
