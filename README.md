@@ -1,6 +1,8 @@
 # corum-api
 The API for Corum built using the Graphcool Framework.
 
+Documentation for the graphcool framework is currently pretty sparse, find the official docs at https://www.graph.cool/docs/reference/
+
 ## Usage
 
 **WARNING:** This is a WIP, and might possibly on work when authenticated with my graphcool account. _(For example, the included `.graphcoolrc` contains the ID of my deployment)_

@@ -22,31 +22,32 @@ rootTokens:
   - signup
   - authenticate 
 
-# These permissions are very permissive
+# These permissions are quite permissive
 # They should be locked down when possible
+
+# Where 'authenticated: true' is present in
+# an operation, the client must pass along
+# their JWT auth token in the request headers.
+# (In the form -> Authorization: 'Bearer ${TOKEN}')
 
 permissions:
   # Subforum Permissions
   - operation: Subforum.create
+    authenticated: true
   - operation: Subforum.read
-  - operation: Subforum.update
-  - operation: Subforum.delete
 
   # Post Permissions
   - operation: Post.create
+    authenticated: true
   - operation: Post.read
-  - operation: Post.update
-  - operation: Post.delete
 
   # Comment Permissions
   - operation: Comment.create
+    authenticated: true
   - operation: Comment.read
-  - operation: Comment.update
-  - operation: Comment.delete
 
   # Relation Permissions
   - operation: SubforumToPost.connect
-  - operation: SubforumToPost.disconnect
-
+    authenticated: true
   - operation: PostToComment.connect
-  - operation: PostToComment.disconnect
+    authenticated: true
