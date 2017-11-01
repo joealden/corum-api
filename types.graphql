@@ -4,7 +4,6 @@ type User @model {
 	updatedAt: DateTime!
 	email: String! @isUnique
 	password: String!
-	username: String
 }
 
 type Subforum @model {
