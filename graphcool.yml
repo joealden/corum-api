@@ -16,16 +16,7 @@ functions:
     schema: src/authenticate.graphql
     handler:
       code: 
-        src: src/authenticate.js
-
-  # Check Authentication Resolver and Mutation
-  loggedInUser:
-    type: resolver
-    schema: src/loggedInUser.graphql
-    handler:
-      code: 
-        src: src/loggedInUser.js
-      
+        src: src/authenticate.js    
 
 permissions:
   # Subforum Permissions
@@ -49,5 +40,4 @@ permissions:
 rootTokens:
   - signup
   - authenticate
-  - loggedInUser
 
