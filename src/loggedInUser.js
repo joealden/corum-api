@@ -43,8 +43,6 @@ module.exports = event => {
 			return { data: emailUser }
 		})
 		.catch(error => {
-			// Log error, but don't expose to caller
-			console.log(`Error: ${JSON.stringify(error)}`)
-			return { error: `An unexpected error occured` }
+			return { error }
 		})
 }

@@ -26,8 +26,7 @@ module.exports = event => {
 	}
 
 	// Retrieve payload from event
-	const email = event.data.email
-	const password = event.data.password
+	const { email, password } = event.data
 
 	// Create Graphcool API (based on https://github.com/graphcool/graphql-request)
 	const graphcool = fromEvent(event)
@@ -36,7 +35,8 @@ module.exports = event => {
 	return getGraphcoolUser(api, email)
 		.then(graphcoolUser => {
 			if (!graphcoolUser) {
-				return Promise.reject('Invalid Credentials') //returning same generic error so user can't find out what emails are registered.
+				//returning same generic error so user can't find out what emails are registered.
+				return Promise.reject('Invalid Credentials')
 			} else {
 				return bcryptjs
 					.compare(password, graphcoolUser.password)
@@ -56,8 +56,6 @@ module.exports = event => {
 			return { data: { token } }
 		})
 		.catch(error => {
-			// Log error, but don't expose to caller
-			console.log(`Error: ${JSON.stringify(error)}`)
-			return { error: `An unexpected error occured` }
+			return { error }
 		})
 }

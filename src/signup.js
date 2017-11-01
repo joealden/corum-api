@@ -45,8 +45,7 @@ module.exports = function(event) {
 	}
 
 	// Retrieve payload from event
-	const email = event.data.email
-	const password = event.data.password
+	const { email, password } = event.data
 
 	// Create Graphcool API (based on https://github.com/graphcool/graphql-request)
 	const graphcool = fromEvent(event)
@@ -55,29 +54,30 @@ module.exports = function(event) {
 	const SALT_ROUNDS = 10
 
 	if (validator.isEmail(email)) {
-		return getGraphcoolUser(api, email)
-			.then(graphcoolUser => {
-				if (!graphcoolUser) {
-					return bcryptjs
-						.hash(password, SALT_ROUNDS)
-						.then(hash => createGraphcoolUser(api, email, hash))
-				} else {
-					return Promise.reject('Email already in use')
-				}
-			})
-			.then(graphcoolUserId => {
-				return graphcool
-					.generateAuthToken(graphcoolUserId, 'User')
-					.then(token => {
-						return { data: { id: graphcoolUserId, token } }
-					})
-			})
-			.catch(error => {
-				// Log error, but don't expose to caller
-				console.log(`Error: ${JSON.stringify(error)}`)
-				return { error: 'An unexpected error occured.' }
-			})
+		return (
+			getGraphcoolUser(api, email)
+				.then(graphcoolUser => {
+					if (!graphcoolUser) {
+						return bcryptjs
+							.hash(password, SALT_ROUNDS)
+							.then(hash => createGraphcoolUser(api, email, hash))
+					} else {
+						return Promise.reject('This email address is already in use')
+					}
+				})
+				.then(graphcoolUserId => {
+					return graphcool
+						.generateAuthToken(graphcoolUserId, 'User')
+						.then(token => {
+							return { data: { id: graphcoolUserId, token } }
+						})
+				})
+				// TODO: Investigate if this is dangerous (If it will log something to the user it shouldn't)
+				.catch(error => {
+					return { error }
+				})
+		)
 	} else {
-		return { error: 'Not a valid email' }
+		return { error: 'The address entered is not a valid email' }
 	}
 }
