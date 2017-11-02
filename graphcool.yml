@@ -10,7 +10,7 @@ functions:
       code: 
         src: src/signup.js
 
-  # Get Authentication Resolver and Mutation
+  # Authentication Resolver and Mutation
   authenticate:
     type: resolver
     schema: src/authenticate.graphql
