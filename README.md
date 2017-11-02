@@ -5,8 +5,6 @@ Documentation for the graphcool framework is currently pretty sparse, find the o
 
 ## Usage
 
-**WARNING:** This is a WIP, and might possibly on work when authenticated with my graphcool account. _(For example, the included `.graphcoolrc` contains the ID of my deployment)_
-
 ### Deploying the API
 To deploy the API (either locally or on a graphcool server), run the following commands:
 
