@@ -8,9 +8,9 @@ Documentation for the graphcool framework is currently pretty sparse, find the o
 ### Deploying the API
 To deploy the API (either locally or on a graphcool server), run the following commands:
 
-```
-npm install
-npm run deploy
+```bash
+npm install # This installs the dependencies for the custom auth resolvers
+npm run deploy # Runs 'graphcool deploy'
 ```
 
 ### Accessing the Playground
