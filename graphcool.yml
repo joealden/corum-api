@@ -18,6 +18,12 @@ functions:
       code: 
         src: src/authenticate.js   
 
+  initVoteCount:
+    type: operationBefore
+    operation: Post.create
+    handler:
+      code: src/initVoteCount.js
+
 rootTokens:
   - signup
   - authenticate 
