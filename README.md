@@ -18,6 +18,6 @@ As the name suggests, the playground lets one play around with the deployment.
 This command will only work if the API has been deployed.
 To access the playground, run the following command:
 
-```
-npm run pg
+```bash
+npm run pg # Opens graphql-playground in the browser 
 ```
