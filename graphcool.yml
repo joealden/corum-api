@@ -32,7 +32,7 @@ rootTokens:
 
 permissions:
   # Subforum Permissions
-  - operation: Subforum.create
+  - operation: Subforum.create # Temp so admin can create
     authenticated: true
   - operation: Subforum.read
 
