@@ -46,6 +46,8 @@ permissions:
   - operation: Post.create
     authenticated: true
   - operation: Post.read
+  # Allows access to User from Post (RESTRICT ACCESS TO HASHED PASSWORD!)
+  - operation: User.read
 
   # Comment Permissions
   - operation: Comment.create
@@ -56,4 +58,6 @@ permissions:
   - operation: SubforumToPost.connect
     authenticated: true
   - operation: PostToComment.connect
+    authenticated: true
+  - operation: UserToPost.connect
     authenticated: true
