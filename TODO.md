@@ -1,12 +1,5 @@
 # TODO
 
-Figure out voting data structure
-**Post Ideas**
-Add two separate arrays for user who have upvoted and downvoted
-
-`upvoteRecord: [User]` and `downvoteRecord [User]`
-(Possible downside is that it would be harder to keep track of user between both)
-
 Add an array that contains type `Vote` called `voteRecord` that contains both upvotes and downvotes.
 - enum `VOTE_ENUM` { `DOWN` | `UP` } |
 - type `Vote` { `user: User!`, `vote: VOTE_ENUM!` }
