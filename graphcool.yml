@@ -1,23 +1,24 @@
-# The main schema of Corum's API
+# Specify the schema for Corum
 types: ./types.graphql
 
 functions:
-  # Sign Up Resolver and Mutation
+  # 'signupUser' Mutation Resolver
   signup:
     type: resolver
     schema: src/signup.graphql
     handler:
-      code: 
+      code:
         src: src/signup.js
 
-  # Authentication Resolver and Mutation
+  # 'authenticateUser' Mutation Resolver
   authenticate:
     type: resolver
     schema: src/authenticate.graphql
     handler:
-      code: 
-        src: src/authenticate.js   
+      code:
+        src: src/authenticate.js
 
+  # Hook function that initialises 'voteCount' to 0 on a new post
   initVoteCount:
     type: operationBefore
     operation: Post.create
@@ -26,15 +27,11 @@ functions:
 
 rootTokens:
   - signup
-  - authenticate 
+  - authenticate
 
-# These permissions are quite permissive
-# They should be locked down when possible
-
-# Where 'authenticated: true' is present in
-# an operation, the client must pass along
-# their JWT auth token in the request headers.
-# (In the form -> Authorization: 'Bearer ${TOKEN}')
+# Where 'authenticated: true' is present in an operation,
+# the client must pass along their JWT auth token in the
+# request headers. (In the form -> Authorization: 'Bearer ${TOKEN}')
 
 permissions:
   # Subforum Permissions
@@ -46,8 +43,12 @@ permissions:
   - operation: Post.create
     authenticated: true
   - operation: Post.read
-  # Allows access to User from Post (RESTRICT ACCESS TO HASHED PASSWORD!)
+  # Allows access to User from Post
   - operation: User.read
+    # Only the username field is made queryable. This means
+    # that malicious users cannot query for someones elses
+    # infomation such as their password, id, or email.
+    fields: [username]
 
   # Comment Permissions
   - operation: Comment.create
