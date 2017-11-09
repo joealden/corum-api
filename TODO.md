@@ -14,3 +14,5 @@ Add an array that contains type `Vote` called `voteRecord` that contains both up
     - Can only create one per post per user, cannot create when upvote exists on post for user
   - deleteDownvote
     - Can only delete if downvote has already been created
+
+- Look into JWT expiration
