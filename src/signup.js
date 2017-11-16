@@ -3,10 +3,17 @@ const bcryptjs = require('bcryptjs')
 const validator = require('validator')
 
 const userQuery = `
-query UserQuery($email: String!) {
-  User(email: $email){
+query UserQuery($email: String!, $username: String!) {
+  allUsers(filter: {
+    OR: [{
+      email: $email
+    }, {
+      username: $username
+    }]
+  }) {
     id
     password
+    email
     username
   }
 }`
@@ -22,12 +29,12 @@ mutation CreateUserMutation($username: String!, $email: String!, $passwordHash: 
   }
 }`
 
-const getGraphcoolUser = (api, email) => {
-  return api.request(userQuery, { email }).then(userQueryResult => {
+const getGraphcoolUsers = (api, email, username) => {
+  return api.request(userQuery, { email, username }).then(userQueryResult => {
     if (userQueryResult.error) {
       return Promise.reject(userQueryResult.error)
     } else {
-      return userQueryResult.User
+      return userQueryResult.allUsers
     }
   })
 }
@@ -56,14 +63,24 @@ module.exports = function(event) {
   const SALT_ROUNDS = 10
 
   if (validator.isEmail(email)) {
-    return getGraphcoolUser(api, email)
-      .then(graphcoolUser => {
-        if (!graphcoolUser) {
+    return getGraphcoolUsers(api, email, username)
+      .then(graphcoolUsers => {
+        if (graphcoolUsers.length === 0) {
           return bcryptjs
             .hash(password, SALT_ROUNDS)
             .then(hash => createGraphcoolUser(api, username, email, hash))
+        } else if (
+          graphcoolUsers.length === 2 ||
+          (graphcoolUsers[0].email === email &&
+            graphcoolUsers[0].username === username)
+        ) {
+          return Promise.reject('The email address and username are in use')
+        } else if (graphcoolUsers[0].email === email) {
+          return Promise.reject('The email address is in use')
+        } else if (graphcoolUsers[0].username === username) {
+          return Promise.reject('The username is in use')
         } else {
-          return Promise.reject('This email address is already in use')
+          return Promise.reject('An unknown error occured')
         }
       })
       .then(id => {
@@ -75,6 +92,6 @@ module.exports = function(event) {
         return { error }
       })
   } else {
-    return { error: 'The address entered is not a valid email' }
+    return { error: 'The email address entered is not valid' }
   }
 }

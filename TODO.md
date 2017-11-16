@@ -1,8 +1,5 @@
 # TODO
 
-## IMPORTANT
-Return a readable error to the user on the `signupUser` mutation if the username already exists
-
 Add an array that contains type `Vote` called `voteRecord` that contains both upvotes and downvotes.
 - enum `VOTE_ENUM` { `DOWN` | `UP` } |
 - type `Vote` { `user: User!`, `vote: VOTE_ENUM!` }
