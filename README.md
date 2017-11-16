@@ -3,6 +3,8 @@ The API for Corum built using the Graphcool Framework.
 
 Documentation for the graphcool framework is currently pretty sparse, find the official docs at https://www.graph.cool/docs/reference/
 
+To find out more about how this API in particular works, visit the main [Corum repo](https://github.com/joealden/corum)
+
 ## Usage
 
 ### Deploying the API
