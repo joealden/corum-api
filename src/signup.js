@@ -1,4 +1,4 @@
-const fromEvent = require('graphcool-lib').fromEvent
+const { fromEvent } = require('graphcool-lib')
 const bcryptjs = require('bcryptjs')
 const validator = require('validator')
 
