@@ -2,6 +2,7 @@
 types: ./types.graphql
 
 functions:
+  # Resolvers
   # 'signupUser' Mutation Resolver
   signup:
     type: resolver
@@ -18,12 +19,20 @@ functions:
       code:
         src: src/authenticate.js
 
-  # Hook function that initialises 'voteCount' to 0 on a new post
+  # Hook functions
+  # Initialises 'voteCount' to 0 on a new post
   initVoteCount:
     type: operationBefore
     operation: Post.create
     handler:
       code: src/initVoteCount.js
+
+  # Ensures that a user cannot vote on a post more that once.
+  userAndPostIsUniqueOnVote:
+    type: operationBefore
+    operation: Vote.create
+    handler:
+      code: src/userAndPostIsUniqueOnVote.js
 
 rootTokens:
   - signup
@@ -55,10 +64,21 @@ permissions:
     authenticated: true
   - operation: Comment.read
 
+  # Vote Permissions
+  - operation: Vote.create
+    authenticated: true
+  - operation: Vote.read
+  - operation: Vote.delete
+    authenticated: true
+
   # Relation Permissions
   - operation: SubforumToPost.connect
     authenticated: true
   - operation: PostToComment.connect
     authenticated: true
   - operation: UserToPost.connect
+    authenticated: true
+  - operation: UserToVote.connect
+    authenticated: true
+  - operation: PostToVote.connect
     authenticated: true

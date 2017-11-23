@@ -6,6 +6,7 @@ type User @model {
   email: String! @isUnique
   password: String!
   posts: [Post!]! @relation(name: "UserToPost")
+  votes: [Vote!]! @relation(name: "UserToVote")
 }
 
 type Subforum @model {
@@ -24,6 +25,7 @@ type Post @model {
   voteCount: Int
   createdAt: DateTime!
   comments: [Comment!]! @relation(name: "PostToComment")
+  votes: [Vote!]! @relation(name: "PostToVote")
 }
 
 type Comment @model {
@@ -31,4 +33,16 @@ type Comment @model {
   post: Post! @relation(name: "PostToComment")
   author: String!
   content: String!
+}
+
+type Vote @model {
+  id: ID! @isUnique
+  post: Post! @relation(name: "PostToVote")
+  user: User! @relation(name: "UserToVote")
+  vote: VoteType!
+}
+
+enum VoteType {
+  VOTE_UP
+  VOTE_DOWN
 }
