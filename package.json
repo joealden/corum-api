@@ -17,11 +17,11 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "graphcool-lib": "^0.1.4",
-    "validator": "^9.1.1"
+    "validator": "^9.1.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
-    "eslint": "^4.10.0",
+    "babel-eslint": "^8.0.3",
+    "eslint": "^4.12.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-plugin-import": "^2.8.0",
