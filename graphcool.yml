@@ -6,18 +6,18 @@ functions:
   # 'signupUser' Mutation Resolver
   signup:
     type: resolver
-    schema: src/signup.graphql
+    schema: src/user/signup.graphql
     handler:
       code:
-        src: src/signup.js
+        src: src/user/signup.js
 
   # 'authenticateUser' Mutation Resolver
   authenticate:
     type: resolver
-    schema: src/authenticate.graphql
+    schema: src/user/authenticate.graphql
     handler:
       code:
-        src: src/authenticate.js
+        src: src/user/authenticate.js
 
   # Hook functions
   # Initialises 'voteCount' to 0 on a new post
@@ -25,18 +25,45 @@ functions:
     type: operationBefore
     operation: Post.create
     handler:
-      code: src/initVoteCount.js
+      code: 
+        src: src/post/initVoteCount.js
 
-  # Ensures that a user cannot vote on a post more that once.
+  # Ensures that a user cannot vote on a post more that once
   userAndPostIsUniqueOnVote:
     type: operationBefore
     operation: Vote.create
     handler:
-      code: src/userAndPostIsUniqueOnVote.js
+      code:
+        src: src/vote/userAndPostIsUnique.js
+
+  # Updates the post's voteCount field on 'Vote' creation
+  updatePostVoteCountOnVoteCreation:
+    type: operationAfter
+    operation: Vote.create
+    handler:
+      code: 
+        src: src/post/updateVoteCountOnVoteCreation.js
+  
+  # Updates the post's voteCount field on 'Vote' update
+  # updatePostVoteCountOnVoteUpdate:
+  #   type: operationAfter
+  #   operation: Vote.update
+  #   handler:
+  #     code: 
+  #       src: src/post/updateVoteCountOnVoteUpdate.js
+
+  # Updates the post's voteCount field on 'Vote' deletion
+  # updatePostVoteCountOnVoteDeletion:
+  #  type: operationAfter
+  #  operation: Vote.delete
+  #  handler:
+  #    code: 
+  #      src: src/post/updateVoteCountOnVoteDeletion.js
 
 rootTokens:
   - signup
   - authenticate
+  - updatePostVoteCountOnVoteCreation
 
 # Where 'authenticated: true' is present in an operation,
 # the client must pass along their JWT auth token in the
@@ -52,6 +79,7 @@ permissions:
   - operation: Post.create
     authenticated: true
   - operation: Post.read
+
   # Allows access to User from Post
   - operation: User.read
     # Only the username field is made queryable. This means
@@ -68,13 +96,15 @@ permissions:
   - operation: Vote.create
     authenticated: true
   - operation: Vote.read
+  - operation: Vote.update
+    authenticated: true
   - operation: Vote.delete
     authenticated: true
 
   # Relation Permissions
   - operation: SubforumToPost.connect
     authenticated: true
-  - operation: PostToComment.connect
+  - operation: PostToComment.connect  
     authenticated: true
   - operation: UserToPost.connect
     authenticated: true
