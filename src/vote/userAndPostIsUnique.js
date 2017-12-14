@@ -1,7 +1,7 @@
 const { fromEvent } = require('graphcool-lib')
 
 /*
-  This is a hook function that executes everytime before a vote is created.
+  This is a hook function that executes every time before a vote is created.
   It ensures that only 1 vote can exist on a post by a single user.
 */
 
