@@ -1,19 +1,6 @@
 # TODO
 
-Add an array that contains type `Vote` called `voteRecord` that contains both
-upvotes and downvotes.
-
-* enum `VOTE_ENUM` { `DOWN` | `UP` } |
-* type `Vote` { `user: User!`, `vote: VOTE_ENUM!` }
-* `voteRecord: [Vote]`
-
-* Implement voting functionality (Possibly through (a) custom resolver(s))
-
-  * upvotePost
-    * Can only create one per post per user, cannot create when downvote exists
-      on post for user
-  * downvotePost
-    * Can only create one per post per user, cannot create when upvote exists on
-      post for user
-
+* Make it so a user can only create of vote in the name of themselves (Look into
+  extending this to post, comment etc.)
+* Make it so that only the user of a vote can update and delete it
 * Look into JWT expiration
