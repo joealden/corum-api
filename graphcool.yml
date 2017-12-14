@@ -45,25 +45,27 @@ functions:
         src: src/post/updateVoteCountOnVoteCreation.js
   
   # Updates the post's voteCount field on 'Vote' update
-  # updatePostVoteCountOnVoteUpdate:
-  #   type: operationAfter
-  #   operation: Vote.update
-  #   handler:
-  #     code: 
-  #       src: src/post/updateVoteCountOnVoteUpdate.js
+  updatePostVoteCountOnVoteUpdate:
+    type: operationAfter
+    operation: Vote.update
+    handler:
+      code: 
+        src: src/post/updateVoteCountOnVoteUpdate.js
 
   # Updates the post's voteCount field on 'Vote' deletion
-  # updatePostVoteCountOnVoteDeletion:
-  #  type: operationAfter
-  #  operation: Vote.delete
-  #  handler:
-  #    code: 
-  #      src: src/post/updateVoteCountOnVoteDeletion.js
+  updatePostVoteCountOnVoteDeletion:
+   type: operationBefore
+   operation: Vote.delete
+   handler:
+     code: 
+       src: src/post/updateVoteCountOnVoteDeletion.js
 
 rootTokens:
   - signup
   - authenticate
   - updatePostVoteCountOnVoteCreation
+  - updatePostVoteCountOnVoteUpdate
+  - updatePostVoteCountOnVoteDeletion
 
 # Where 'authenticated: true' is present in an operation,
 # the client must pass along their JWT auth token in the
