@@ -5,19 +5,19 @@ const { fromEvent } = require('graphcool-lib')
   It ensures that only 1 vote can exist on a post by a single user.
 */
 
+/*
+  This query fetches the single vote that belongs to the user.
+  This works because there should only ever exist a single vote that
+  has the same postId and userId, due to this very hook function.
+
+  TODO: Very similar to 'corum/apollo/queries/userVote.gql',
+  maybe use fragments to reduce duplication
+*/
 const voteQuery = `
 query VoteQuery($postId: ID!, $userId: ID!) {
-  allVotes(filter: {
-    AND: [{
-      post: {
-        id: $postId
-      }
-    }, {
-      user: {
-        id: $userId
-      }
-    }]
-  }) {
+  allVotes(
+    filter: { AND: [{ post: { id: $postId } }, { user: { id: $userId } }] }
+  ) {
     id
   }
 }
