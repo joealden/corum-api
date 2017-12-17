@@ -11,7 +11,7 @@ const { fromEvent } = require('graphcool-lib')
   has the same postId and userId, due to this very hook function.
 
   TODO: Very similar to 'corum/apollo/queries/userVote.gql',
-  maybe use fragments to reduce duplication
+  maybe use fragments to reduce duplication / import
 */
 const voteQuery = `
 query VoteQuery($postId: ID!, $userId: ID!) {
@@ -23,7 +23,7 @@ query VoteQuery($postId: ID!, $userId: ID!) {
 }
 `
 
-module.exports = event => {
+module.exports = async event => {
   // Retrieve payload from event
   const { data } = event
   const { postId, userId } = data
@@ -32,16 +32,20 @@ module.exports = event => {
   const graphcool = fromEvent(event)
   const api = graphcool.api('simple/v1')
 
-  return api
-    .request(voteQuery, { postId, userId })
-    .then(({ allVotes }) => {
-      if (allVotes.length !== 0) {
-        return Promise.reject('This user already has a vote on this post')
-      } else {
-        return { data }
-      }
-    })
-    .catch(error => {
-      return { error }
-    })
+  try {
+    const queryResult = await api.request(voteQuery, { postId, userId })
+
+    if (queryResult.error) {
+      return { error: 'Something went wrong on our end, sorry!' }
+    }
+
+    const { allVotes } = queryResult
+    if (allVotes.length === 0) {
+      return { data }
+    } else {
+      return { error: 'This user already has a vote on this post' }
+    }
+  } catch (error) {
+    return { error }
+  }
 }
