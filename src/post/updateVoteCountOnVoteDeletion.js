@@ -41,6 +41,7 @@ const makeRequest = async (api, query, variables) => {
 }
 
 module.exports = async event => {
+  // Retrieve payload from event
   const { data } = event
   const voteId = data.id
 
