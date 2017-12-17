@@ -14,17 +14,6 @@ query getPostIdFromVote($voteId: ID!) {
   }
 }
 `
-
-const getPostIdFromVote = (api, voteId) => {
-  return api.request(postIdFromVoteQuery, { voteId }).then(queryResult => {
-    if (queryResult.error) {
-      return Promise.reject(queryResult.error)
-    } else {
-      return queryResult
-    }
-  })
-}
-
 const currentPostVoteCount = `
 query getCurrentPostVoteCount($postId: ID!) {
   Post(id: $postId) {
@@ -32,17 +21,6 @@ query getCurrentPostVoteCount($postId: ID!) {
   }
 }
 `
-
-const getCurrentPostVoteCount = (api, postId) => {
-  return api.request(currentPostVoteCount, { postId }).then(queryResult => {
-    if (queryResult.error) {
-      return Promise.reject(queryResult.error)
-    } else {
-      return queryResult
-    }
-  })
-}
-
 const updatePost = `
 mutation updatePost($postId: ID!, $newVoteCount: Int!) {
   updatePost(id: $postId, voteCount: $newVoteCount) {
@@ -51,17 +29,17 @@ mutation updatePost($postId: ID!, $newVoteCount: Int!) {
 }
 `
 
-const updatePostVoteCount = (api, variables) => {
-  return api.request(updatePost, variables).then(queryResult => {
-    if (queryResult.error) {
-      return Promise.reject(queryResult.error)
-    } else {
-      return queryResult
-    }
-  })
+const makeRequest = async (api, query, variables) => {
+  const queryResult = await api.request(query, variables)
+
+  if (queryResult.error) {
+    return Promise.reject(queryResult.error)
+  } else {
+    return queryResult
+  }
 }
 
-module.exports = event => {
+module.exports = async event => {
   const { data } = event
   const voteId = data.id
   const voteType = data.vote
@@ -70,28 +48,24 @@ module.exports = event => {
   const graphcool = fromEvent(event)
   const api = graphcool.api('simple/v1')
 
-  let postId
+  try {
+    const { Vote } = await makeRequest(api, postIdFromVoteQuery, { voteId })
+    const postId = Vote.post.id
 
-  return getPostIdFromVote(api, voteId)
-    .then(({ Vote }) => {
-      postId = Vote.post.id
-      return getCurrentPostVoteCount(api, postId)
-    })
-    .then(({ Post }) => {
-      const oldVoteCount = Post.voteCount
+    const { Post } = await makeRequest(api, currentPostVoteCount, { postId })
+    const oldVoteCount = Post.voteCount
 
-      let newVoteCount
-      if (voteType === 'VOTE_UP') {
-        newVoteCount = oldVoteCount + 2
-      } else if (voteType === 'VOTE_DOWN') {
-        newVoteCount = oldVoteCount - 2
-      } else {
-        return Promise.reject('voteType is not defined')
-      }
+    let newVoteCount
+    if (voteType === 'VOTE_UP') {
+      newVoteCount = oldVoteCount + 2
+    } else if (voteType === 'VOTE_DOWN') {
+      newVoteCount = oldVoteCount - 2
+    } else {
+      return Promise.reject('voteType is not defined')
+    }
 
-      return updatePostVoteCount(api, { postId, newVoteCount }).then(() => ({
-        data
-      }))
-    })
-    .catch(error => ({ error }))
+    return await makeRequest(api, updatePost, { postId, newVoteCount })
+  } catch (error) {
+    return { error }
+  }
 }
