@@ -1,6 +1,15 @@
 import { fromEvent } from 'graphcool-lib'
-
-const VOTE_COUNT_TO_DELETE_POST = -1
+import {
+  VOTE_COUNT_TO_DELETE_POST,
+  makeRequest,
+  deleteAllVotesOnPost,
+  postIdFromVoteQuery,
+  currentPostVoteCount,
+  getAllVoteIdsOnPost,
+  deleteVote,
+  deletePost,
+  updatePost
+} from '../../utils/common'
 
 /*
   This is a hook function that executes every time after a vote is created.
@@ -8,72 +17,6 @@ const VOTE_COUNT_TO_DELETE_POST = -1
   Also, if the new vote count is equal or less than the VOTE_COUNT_TO_DELETE_POST
   constant, then the post will be deleted (The automated management system)
 */
-
-const postIdFromVoteQuery = `
-query getPostIdFromVote($voteId: ID!) {
-  Vote(id: $voteId) {
-    post {
-      id
-    }
-  }
-}
-`
-const currentPostVoteCount = `
-query getCurrentPostVoteCount($postId: ID!) {
-  Post(id: $postId) {
-    voteCount
-  }
-}
-`
-const getAllVoteIdsOnPost = `
-query getAllVoteIdsOnPost($postId: ID!) {
-  allVotes(filter: { post: { id: $postId }}) {
-    id
-  }
-}
-`
-const deleteVote = `
-mutation deletePost($voteId: ID!) {
-  deleteVote(id: $voteId) {
-    id
-  }
-}
-`
-const deletePost = `
-mutation deletePost($postId: ID!) {
-  deletePost(id: $postId) {
-    voteCount
-  }
-}
-`
-const updatePost = `
-mutation updatePost($postId: ID!, $newVoteCount: Int!) {
-  updatePost(id: $postId, voteCount: $newVoteCount) {
-    voteCount
-  }
-}
-`
-
-const makeRequest = async (api, query, variables) => {
-  const queryResult = await api.request(query, variables)
-
-  if (queryResult.error) {
-    return Promise.reject(queryResult.error)
-  } else {
-    return queryResult
-  }
-}
-
-const deleteAllVotesOnPost = async (api, postId) => {
-  const { allVotes } = await makeRequest(api, getAllVoteIdsOnPost, { postId })
-  const voteIdList = allVotes.map(vote => vote.id)
-
-  return await Promise.all(
-    voteIdList.map(voteId => {
-      return makeRequest(api, deleteVote, { voteId })
-    })
-  )
-}
 
 export default async event => {
   // Retrieve payload from event
