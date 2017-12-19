@@ -2,7 +2,8 @@
 types: ./types.graphql
 
 functions:
-  # Resolvers
+  # Resolvers ------------------------------------------------
+
   # 'signupUser' Mutation Resolver
   signup:
     type: resolver
@@ -19,7 +20,8 @@ functions:
       code:
         src: src/user/authenticate.js
 
-  # Hook functions
+  # Hook functions -------------------------------------------
+
   # Initialises 'voteCount' to 0 on a new post
   initVoteCount:
     type: operationBefore
@@ -36,15 +38,18 @@ functions:
       code:
         src: src/vote/userAndPostIsUnique.js
 
-  # Updates the post's voteCount field on 'Vote' creation
+  # Functions to handle updating the 'voteCount' value
+  # on the Post type when a vote operation occurs, as
+  # well as deleting the associated post if the vote
+  # count drops below a certain value
+
   updatePostVoteCountOnVoteCreation:
     type: operationAfter
     operation: Vote.create
     handler:
       code: 
         src: src/post/updateVoteCountOnVoteCreation.js
-  
-  # Updates the post's voteCount field on 'Vote' update
+
   updatePostVoteCountOnVoteUpdate:
     type: operationAfter
     operation: Vote.update
@@ -52,13 +57,13 @@ functions:
       code: 
         src: src/post/updateVoteCountOnVoteUpdate.js
 
-  # Updates the post's voteCount field on 'Vote' deletion
   updatePostVoteCountOnVoteDeletion:
    type: operationBefore
    operation: Vote.delete
    handler:
      code: 
        src: src/post/updateVoteCountOnVoteDeletion.js
+
 
 rootTokens:
   - signup
