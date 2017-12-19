@@ -5,6 +5,7 @@ type User @model {
   password: String!
   posts: [Post!]! @relation(name: "UserToPost")
   votes: [Vote!]! @relation(name: "UserToVote")
+  favorites: [Subforum!]! @relation(name: "Favorites")
 }
 
 type Subforum @model {
@@ -12,6 +13,7 @@ type Subforum @model {
   url: String! @isUnique
   name: String!
   posts: [Post!]! @relation(name: "SubforumToPost")
+  favoritedBy: [User!]! @relation(name: "Favorites")
 }
 
 type Post @model {

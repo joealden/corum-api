@@ -76,7 +76,28 @@ rootTokens:
 # the client must pass along their JWT auth token in the
 # request headers. (In the form -> Authorization: 'Bearer ${TOKEN}')
 
+# Eventually write permission queries for the following:
+# - User
+#   - Only the user can update their favorites
+# - Post
+#   - A user cannot impersonate another user (author has to be the user logged in)
+# - Comment 
+#   - A user cannot impersonate another user (author has to be the user logged in)
+# - Vote
+#   - A user cannot impersonate another user (author has to be the user logged in)
+#   - This applies to create, update and delete
+
 permissions:
+  # Allows access to User from Post
+  - operation: User.read
+    # Only the username field is made queryable. This means
+    # that malicious users cannot query for someones elses
+    # infomation such as their password, id, or email.
+    fields: [username, favorites]
+  - operation: User.update
+    fields: [favorites]
+    authenticated: true
+
   # Subforum Permissions
   - operation: Subforum.create # Temp so admin can create
     authenticated: true
@@ -86,13 +107,6 @@ permissions:
   - operation: Post.create
     authenticated: true
   - operation: Post.read
-
-  # Allows access to User from Post
-  - operation: User.read
-    # Only the username field is made queryable. This means
-    # that malicious users cannot query for someones elses
-    # infomation such as their password, id, or email.
-    fields: [username]
 
   # Comment Permissions
   - operation: Comment.create
@@ -118,4 +132,6 @@ permissions:
   - operation: UserToVote.connect
     authenticated: true
   - operation: PostToVote.connect
+    authenticated: true
+  - operation: Favorites.connect
     authenticated: true
