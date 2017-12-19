@@ -1,4 +1,4 @@
-const { fromEvent } = require('graphcool-lib')
+import { fromEvent } from 'graphcool-lib'
 
 /*
   This is a hook function that executes every time before a vote is created.
@@ -23,7 +23,7 @@ query VoteQuery($postId: ID!, $userId: ID!) {
 }
 `
 
-module.exports = async event => {
+export default async event => {
   // Retrieve payload from event
   const { data } = event
   const { postId, userId } = data
