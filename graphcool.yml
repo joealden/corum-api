@@ -29,6 +29,14 @@ functions:
     handler:
       code: 
         src: src/post/initVoteCount.js
+  
+  # Ensures that a user can only create one favorite per subforum
+  userAndSubforumIsUniqueOnFavorite:
+    type: operationBefore
+    operation: Favorite.create
+    handler:
+      code:
+        src: src/favorite/userAndSubforumIsUnique.js
 
   # Ensures that a user cannot vote on a post more that once
   userAndPostIsUniqueOnVote:
@@ -93,15 +101,19 @@ permissions:
     # Only the username field is made queryable. This means
     # that malicious users cannot query for someones elses
     # infomation such as their password, id, or email.
-    fields: [username, favorites]
-  - operation: User.update
-    fields: [favorites]
-    authenticated: true
+    fields: [username]
 
   # Subforum Permissions
   - operation: Subforum.create # Temp so admin can create
     authenticated: true
   - operation: Subforum.read
+
+  # Favorite Permissions
+  - operation: Favorite.create
+    authenticated: true
+  - operation: Favorite.read
+  - operation: Favorite.delete
+    authenticated: true
 
   # Post Permissions
   - operation: Post.create
@@ -133,5 +145,7 @@ permissions:
     authenticated: true
   - operation: PostToVote.connect
     authenticated: true
-  - operation: Favorites.connect
+  - operation: UserToFavorite.connect
+    authenticated: true
+  - operation: SubforumToFavorite.connect
     authenticated: true
