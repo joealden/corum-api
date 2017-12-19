@@ -1,4 +1,5 @@
 import { fromEvent } from 'graphcool-lib'
+import { makeRequest } from '../../utils/common'
 
 /*
   This is a hook function that executes every time before a vote is created.
@@ -13,6 +14,7 @@ import { fromEvent } from 'graphcool-lib'
   TODO: Very similar to 'corum/apollo/queries/userVote.gql',
   maybe use fragments to reduce duplication / import
 */
+
 const voteQuery = `
 query VoteQuery($postId: ID!, $userId: ID!) {
   allVotes(
@@ -33,13 +35,8 @@ export default async event => {
   const api = graphcool.api('simple/v1')
 
   try {
-    const queryResult = await api.request(voteQuery, { postId, userId })
+    const { allVotes } = await makeRequest(api, voteQuery, { postId, userId })
 
-    if (queryResult.error) {
-      return { error: 'Something went wrong on our end, sorry!' }
-    }
-
-    const { allVotes } = queryResult
     if (allVotes.length === 0) {
       return { data }
     } else {
