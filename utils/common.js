@@ -55,6 +55,7 @@ export const deleteAllVotesOnPost = async (api, postId) => {
 }
 
 // GraphQL Queries
+
 export const postIdFromVoteQuery = `
 query getPostIdFromVote($voteId: ID!) {
   Vote(id: $voteId) {
@@ -80,6 +81,7 @@ query getAllVoteIdsOnPost($postId: ID!) {
 `
 
 // GraphQL Mutations
+
 export const deleteVote = `
 mutation deletePost($voteId: ID!) {
   deleteVote(id: $voteId) {
