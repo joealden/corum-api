@@ -10,13 +10,19 @@
     "type": "git",
     "url": "git+https://github.com/joealden/corum-api.git"
   },
+  "engines": {
+    "node": ">=8",
+    "npm": ">= 5"
+  },
+  "lint-staged": {
+    "*.{js}": ["eslint ./*.js", "git add"],
+    "*.{js,json,md}": ["prettier --config ./.prettierrc --write", "git add"]
+  },
   "scripts": {
     "deploy": "graphcool deploy",
     "pg": "graphcool playground",
-    "lint": "echo Lint...",
-    "format": "echo format...",
     "test": "echo test...",
-    "precommit": "yarn lint; yarn format; yarn test;"
+    "precommit": "lint-staged && yarn test"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -34,6 +40,8 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "husky": "^0.14.3"
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.9.2"
   }
 }
