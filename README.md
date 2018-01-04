@@ -17,7 +17,7 @@ commands:
 
 ```bash
 yarn
-yarn deploy
+yarn gcf deploy
 ```
 
 ### Accessing the Playground
@@ -27,5 +27,5 @@ This command will only work if the API has been deployed. To access the
 playground, run the following command:
 
 ```bash
-yarn pg
+yarn gcf playground
 ```

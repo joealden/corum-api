@@ -66,8 +66,8 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "8.5.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"
+  version "8.5.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.5.tgz#6f9e8164ae1a55a9beb1d2571cfb7acf9d720c61"
 
 abbrev@1:
   version "1.1.1"
@@ -1327,9 +1327,9 @@ graceful-fs@~3.0.2:
   dependencies:
     natives "^1.1.0"
 
-graphcool-cli-core@1.10.5-framework:
-  version "1.10.5-framework"
-  resolved "https://registry.yarnpkg.com/graphcool-cli-core/-/graphcool-cli-core-1.10.5-framework.tgz#2d37244d122c95ae83a47e8b48c1af441b1858a2"
+graphcool-cli-core@1.10.7-framework:
+  version "1.10.7-framework"
+  resolved "https://registry.yarnpkg.com/graphcool-cli-core/-/graphcool-cli-core-1.10.7-framework.tgz#756fa9312933c4770a39297fa8f3015d5f5f54bb"
   dependencies:
     archiver "^2.1.0"
     callsites "^2.0.0"
@@ -1365,9 +1365,9 @@ graphcool-cli-core@1.10.5-framework:
     validator "^8.2.0"
     yauzl "^2.9.1"
 
-graphcool-cli-engine@0.5.6-framework:
-  version "0.5.6-framework"
-  resolved "https://registry.yarnpkg.com/graphcool-cli-engine/-/graphcool-cli-engine-0.5.6-framework.tgz#ff093f2e6135784ec9e762ab6541838e5a941959"
+graphcool-cli-engine@0.6.6-framework:
+  version "0.6.6-framework"
+  resolved "https://registry.yarnpkg.com/graphcool-cli-engine/-/graphcool-cli-engine-0.6.6-framework.tgz#9cf4b4154179322591b45808eec88d07e54c7410"
   dependencies:
     "@heroku/linewrap" "^1.0.0"
     "@types/fs-extra" "^4.0.2"
@@ -1420,6 +1420,16 @@ graphcool-cli-engine@0.5.6-framework:
     validator "^8.2.0"
     yaml-ast-parser "^0.0.34"
 
+graphcool-framework@^0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/graphcool-framework/-/graphcool-framework-0.11.5.tgz#c20e6aaa2a7e0057a6873853ef2993689f5be22a"
+  dependencies:
+    fs-extra "^4.0.1"
+    graphcool-cli-core "1.10.7-framework"
+    graphcool-cli-engine "0.6.6-framework"
+    semver "^5.4.1"
+    source-map-support "^0.4.18"
+
 graphcool-inquirer@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/graphcool-inquirer/-/graphcool-inquirer-1.0.3.tgz#4ab8e28b4b9371eabb8ad0ad3c59754a35431633"
@@ -1454,16 +1464,6 @@ graphcool-lib@^0.1.4:
     graphql-tools "^2.4.0"
     node-fetch "^1.7.3"
     source-map-support "^0.4.17"
-
-graphcool@^0.11.4:
-  version "0.11.4"
-  resolved "https://registry.yarnpkg.com/graphcool/-/graphcool-0.11.4.tgz#36598a54176d4e1430aaf08c2c4a27e7b384b24d"
-  dependencies:
-    fs-extra "^4.0.1"
-    graphcool-cli-core "1.10.5-framework"
-    graphcool-cli-engine "0.5.6-framework"
-    semver "^5.4.1"
-    source-map-support "^0.4.18"
 
 graphql-request@^1.3.4:
   version "1.4.0"
