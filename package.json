@@ -20,7 +20,7 @@
   },
   "scripts": {
     "gcf": "graphcool-framework",
-    "test": "echo test...",
+    "test": "echo '[INFO] Tests are not yet implemented.'",
     "precommit": "lint-staged && yarn test"
   },
   "dependencies": {
