@@ -2,7 +2,7 @@
 types: ./types.graphql
 
 functions:
-  # Resolvers ------------------------------------------------
+  # Resolvers
 
   # 'signupUser' Mutation Resolver
   signup:
@@ -20,7 +20,7 @@ functions:
       code:
         src: src/user/authenticate.js
 
-  # Hook functions -------------------------------------------
+  # Hook functions
 
   # Initialises 'voteCount' to 0 on a new post
   initVoteCount:
@@ -46,10 +46,9 @@ functions:
       code:
         src: src/vote/userAndPostIsUnique.js
 
-  # Functions to handle updating the 'voteCount' value
-  # on the Post type when a vote operation occurs, as
-  # well as deleting the associated post if the vote
-  # count drops below a certain value
+  # Functions to handle updating the 'voteCount' value on the Post
+  # type when a vote operation occurs, as well as deleting the
+  # associated post if the vote count drops below a certain value.
 
   updatePostVoteCountOnVoteCreation:
     type: operationAfter
@@ -71,7 +70,6 @@ functions:
    handler:
      code: 
        src: src/post/updateVoteCountOnVoteDeletion.js
-
 
 rootTokens:
   - signup
@@ -96,11 +94,13 @@ rootTokens:
 #   - This applies to create, update and delete
 
 permissions:
-  # Allows access to User from Post
-  - operation: User.read
+    # User Permissions
+
+    # Allows access to User from Post
     # Only the username field is made queryable. This means
     # that malicious users cannot query for someones elses
     # infomation such as their password, id, or email.
+  - operation: User.read  
     fields: [username]
 
   # Subforum Permissions
@@ -111,41 +111,55 @@ permissions:
   # Favorite Permissions
   - operation: Favorite.create
     authenticated: true
+    # permission query here
   - operation: Favorite.read
   - operation: Favorite.delete
     authenticated: true
+    # permission query here
 
   # Post Permissions
   - operation: Post.create
     authenticated: true
+    # permission query here
   - operation: Post.read
 
   # Comment Permissions
   - operation: Comment.create
     authenticated: true
+    # permission query here
   - operation: Comment.read
 
   # Vote Permissions
   - operation: Vote.create
     authenticated: true
+    # permission query here
   - operation: Vote.read
   - operation: Vote.update
     authenticated: true
+    # permission query here
   - operation: Vote.delete
     authenticated: true
+    # permission query here
 
   # Relation Permissions
   - operation: SubforumToPost.connect
     authenticated: true
-  - operation: PostToComment.connect  
+    # permission query here
+  - operation: PostToComment.connect
     authenticated: true
+    # permission query here
   - operation: UserToPost.connect
     authenticated: true
+    # permission query here
   - operation: UserToVote.connect
     authenticated: true
+    # permission query here
   - operation: PostToVote.connect
     authenticated: true
+    # permission query here
   - operation: UserToFavorite.connect
     authenticated: true
+    # permission query here
   - operation: SubforumToFavorite.connect
     authenticated: true
+    # permission query here
