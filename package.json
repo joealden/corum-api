@@ -24,23 +24,23 @@
     "precommit": "lint-staged && yarn test"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "graphcool-lib": "^0.1.4",
+    "bcryptjs": "2.4.3",
+    "graphcool-lib": "0.1.4",
     "validator": "^9.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.3",
     "eslint": "^4.12.1",
-    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-prettier": "2.9.0",
     "eslint-config-standard": "^10.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "graphcool-framework": "^0.11.5",
-    "husky": "^0.14.3",
-    "lint-staged": "^6.0.0",
-    "prettier": "^1.9.2"
+    "eslint-friendly-formatter": "3.0.0",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-node": "5.2.1",
+    "eslint-plugin-promise": "3.6.0",
+    "eslint-plugin-standard": "3.0.1",
+    "graphcool-framework": "0.11.5",
+    "husky": "0.14.3",
+    "lint-staged": "6.0.0",
+    "prettier": "1.9.2"
   }
 }
