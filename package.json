@@ -29,8 +29,8 @@
     "validator": "9.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.3",
-    "eslint": "^4.12.1",
+    "babel-eslint": "8.1.2",
+    "eslint": "4.15.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "3.0.0",
