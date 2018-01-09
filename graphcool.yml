@@ -104,7 +104,7 @@ permissions:
     fields: [username]
 
   # Subforum Permissions
-  - operation: Subforum.create # Temp so admin can create
+  - operation: Subforum.create
     authenticated: true
   - operation: Subforum.read
 
