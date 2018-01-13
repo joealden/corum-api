@@ -5,3 +5,4 @@
 * Make it so that only the user of a vote can update and delete it
 * Convert auth js to async await (Look at example in framework repo)
 * Look into JWT expiration
+* Look into moving config like vote threshold out into a .env file
