@@ -1,6 +1,8 @@
 /*
   This file contains the common code that is found across the
   hook functions and resolvers found in the 'src' directory.
+
+  TODO: Extract out into seperate files
 */
 
 // Constants
@@ -57,49 +59,49 @@ export const deleteAllVotesOnPost = async (api, postId) => {
 // GraphQL Queries
 
 export const postIdFromVoteQuery = `
-query getPostIdFromVote($voteId: ID!) {
-  Vote(id: $voteId) {
-    post {
+  query getPostIdFromVote($voteId: ID!) {
+    Vote(id: $voteId) {
+      post {
+        id
+      }
+    }
+  }
+`
+export const currentPostVoteCount = `
+  query getCurrentPostVoteCount($postId: ID!) {
+    Post(id: $postId) {
+      voteCount
+    }
+  }
+`
+export const getAllVoteIdsOnPost = `
+  query getAllVoteIdsOnPost($postId: ID!) {
+    allVotes(filter: { post: { id: $postId } }) {
       id
     }
   }
-}
-`
-export const currentPostVoteCount = `
-query getCurrentPostVoteCount($postId: ID!) {
-  Post(id: $postId) {
-    voteCount
-  }
-}
-`
-export const getAllVoteIdsOnPost = `
-query getAllVoteIdsOnPost($postId: ID!) {
-  allVotes(filter: { post: { id: $postId }}) {
-    id
-  }
-}
 `
 
 // GraphQL Mutations
 
 export const deleteVote = `
-mutation deletePost($voteId: ID!) {
-  deleteVote(id: $voteId) {
-    id
+  mutation deletePost($voteId: ID!) {
+    deleteVote(id: $voteId) {
+      id
+    }
   }
-}
 `
 export const deletePost = `
-mutation deletePost($postId: ID!) {
-  deletePost(id: $postId) {
-    voteCount
+  mutation deletePost($postId: ID!) {
+    deletePost(id: $postId) {
+      voteCount
+    }
   }
-}
 `
 export const updatePost = `
-mutation updatePost($postId: ID!, $newVoteCount: Int!) {
-  updatePost(id: $postId, voteCount: $newVoteCount) {
-    voteCount
+  mutation updatePost($postId: ID!, $newVoteCount: Int!) {
+    updatePost(id: $postId, voteCount: $newVoteCount) {
+      voteCount
+    }
   }
-}
 `
