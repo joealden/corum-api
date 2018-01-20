@@ -1,68 +1,53 @@
-const { fromEvent } = require('graphcool-lib')
-const bcryptjs = require('bcryptjs')
+// @ts-check
+
+import { fromEvent } from 'graphcool-lib'
+import * as bcryptjs from 'bcryptjs'
+import { makeRequest } from '../../utils/common'
 
 const userQuery = `
-query UserQuery($email: String!) {
-  User(email: $email){
-    id
-    password
-    username
-  }
-}`
-
-const getGraphcoolUser = (api, email) => {
-  return api.request(userQuery, { email }).then(userQueryResult => {
-    if (userQueryResult.error) {
-      return Promise.reject(userQueryResult.error)
-    } else {
-      return userQueryResult.User
+  query UserQuery($email: String!) {
+    User(email: $email) {
+      id
+      password
+      username
     }
-  })
-}
-
-module.exports = event => {
-  if (!event.context.graphcool.pat) {
-    console.log('Please provide a valid root token!')
-    return { error: 'Email Authentication not configured correctly.' }
   }
+`
 
-  // Retrieve payload from event
-  const { email, password } = event.data
+export default async event => {
+  try {
+    // Retrieve payload from event
+    const { email, password } = event.data
 
-  // Create Graphcool API (based on https://github.com/graphcool/graphql-request)
-  const graphcool = fromEvent(event)
-  const api = graphcool.api('simple/v1')
+    // Create Graphcool API (based on https://github.com/graphcool/graphql-request)
+    const graphcool = fromEvent(event)
+    const api = graphcool.api('simple/v1')
 
-  return getGraphcoolUser(api, email)
-    .then(graphcoolUser => {
-      if (!graphcoolUser) {
-        // returning same generic error so user can't find out what emails are registered.
-        return Promise.reject('Invalid Credentials')
-      } else {
-        return bcryptjs
-          .compare(password, graphcoolUser.password)
-          .then(passwordCorrect => {
-            if (passwordCorrect) {
-              const { id, username } = graphcoolUser
-              return { id, username }
-            } else {
-              return Promise.reject('Invalid Credentials')
-            }
-          })
+    // Check if a user exists with the email entered
+    const { User } = await makeRequest(api, userQuery, { email })
+    if (!User) {
+      return { error: 'Invalid credentials!' }
+    }
+
+    // Check if the user entered the correct password for the user
+    const passwordIsCorrect = await bcryptjs.compare(password, User.password)
+    if (!passwordIsCorrect) {
+      return { error: 'Invalid credentials!' }
+    }
+
+    // Generate auth token
+    const { id, username } = User
+    const token = await graphcool.generateAuthToken(id, 'User')
+
+    // Return the payload the user asked for
+    return {
+      data: {
+        id,
+        username,
+        token
       }
-    })
-    .then(async graphcoolUserDetails => {
-      const { username, id } = graphcoolUserDetails
-      const token = await graphcool.generateAuthToken(id, 'User')
-      return {
-        data: {
-          id,
-          username,
-          token
-        }
-      }
-    })
-    .catch(error => {
-      return { error }
-    })
+    }
+  } catch (error) {
+    return { error }
+  }
 }

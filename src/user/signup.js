@@ -1,58 +1,34 @@
-const { fromEvent } = require('graphcool-lib')
-const bcryptjs = require('bcryptjs')
-const validator = require('validator')
+// @ts-check
+
+import { fromEvent } from 'graphcool-lib'
+import * as bcryptjs from 'bcryptjs'
+import * as validator from 'validator'
+import { makeRequest } from '../../utils/common'
 
 const userQuery = `
-query UserQuery($email: String!, $username: String!) {
-  allUsers(filter: {
-    OR: [{
-      email: $email
-    }, {
-      username: $username
-    }]
-  }) {
-    id
-    password
-    email
-    username
+  query UserQuery($email: String!, $username: String!) {
+    allUsers(filter: { OR: [{ email: $email }, { username: $username }] }) {
+      id
+      password
+      email
+      username
+    }
   }
-}`
+`
 
 const createUserMutation = `
-mutation CreateUserMutation($username: String!, $email: String!, $passwordHash: String!) {
-  createUser(
-    username: $username
-    email: $email,
-    password: $passwordHash
+  mutation CreateUserMutation(
+    $username: String!
+    $email: String!
+    $passwordHash: String!
   ) {
-    id
-  }
-}`
-
-const getGraphcoolUsers = (api, email, username) => {
-  return api.request(userQuery, { email, username }).then(userQueryResult => {
-    if (userQueryResult.error) {
-      return Promise.reject(userQueryResult.error)
-    } else {
-      return userQueryResult.allUsers
+    createUser(username: $username, email: $email, password: $passwordHash) {
+      id
     }
-  })
-}
-
-const createGraphcoolUser = (api, username, email, passwordHash) => {
-  return api
-    .request(createUserMutation, { username, email, passwordHash })
-    .then(userMutationResult => {
-      return userMutationResult.createUser.id
-    })
-}
-
-module.exports = function(event) {
-  if (!event.context.graphcool.pat) {
-    console.log('Please provide a valid root token!')
-    return { error: 'Email Signup not configured correctly.' }
   }
+`
 
+export default async event => {
   // Retrieve payload from event
   const { username, email, password } = event.data
 
@@ -62,36 +38,54 @@ module.exports = function(event) {
 
   const SALT_ROUNDS = 10
 
-  if (validator.isEmail(email)) {
-    return getGraphcoolUsers(api, email, username)
-      .then(graphcoolUsers => {
-        if (graphcoolUsers.length === 0) {
-          return bcryptjs
-            .hash(password, SALT_ROUNDS)
-            .then(hash => createGraphcoolUser(api, username, email, hash))
-        } else if (
-          graphcoolUsers.length === 2 ||
-          (graphcoolUsers[0].email === email &&
-            graphcoolUsers[0].username === username)
-        ) {
-          return Promise.reject('The email address and username are in use')
-        } else if (graphcoolUsers[0].email === email) {
-          return Promise.reject('The email address is in use')
-        } else if (graphcoolUsers[0].username === username) {
-          return Promise.reject('The username is in use')
-        } else {
-          return Promise.reject('An unknown error occured')
+  try {
+    // Check is email is valid
+    if (validator.isEmail(email) === false) {
+      return { error: 'The email address entered is not valid' }
+    }
+
+    // Fetch all users that match the users input (if any)
+    const { allUsers } = await makeRequest(api, userQuery, { email, username })
+
+    // If no users exists with the same details, create the user
+    if (allUsers.length === 0) {
+      // Generate the password hash that will be stored in the DB
+      const passwordHash = await bcryptjs.hash(password, SALT_ROUNDS)
+
+      // Create the user
+      const { createUser } = await makeRequest(api, createUserMutation, {
+        email,
+        username,
+        passwordHash
+      })
+
+      // Generate auth token
+      const { id } = createUser
+      const token = await graphcool.generateAuthToken(id, 'User')
+
+      // Return the payload the user asked for
+      return {
+        data: {
+          id,
+          token
         }
-      })
-      .then(id => {
-        return graphcool.generateAuthToken(id, 'User').then(token => {
-          return { data: { id, token } }
-        })
-      })
-      .catch(error => {
-        return { error }
-      })
-  } else {
-    return { error: 'The email address entered is not valid' }
+      }
+    }
+
+    // If any users do exist, throw the correct informative error
+    if (
+      allUsers.length === 2 ||
+      (allUsers[0].email === email && allUsers[0].username === username)
+    ) {
+      return { error: 'The email address and username are in use' }
+    } else if (allUsers[0].email === email) {
+      return { error: 'The email address is in use' }
+    } else if (allUsers[0].username === username) {
+      return { error: 'The username is in use' }
+    } else {
+      return { error: 'An unknown error occured' }
+    }
+  } catch (error) {
+    return { error }
   }
 }
