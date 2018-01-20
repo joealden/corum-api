@@ -1,3 +1,5 @@
+// @ts-check
+
 import { fromEvent } from 'graphcool-lib'
 import { makeRequest } from '../../utils/common'
 

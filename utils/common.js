@@ -1,3 +1,5 @@
+// @ts-check
+
 /*
   This file contains the common code that is found across the
   hook functions and resolvers found in the 'src' directory.

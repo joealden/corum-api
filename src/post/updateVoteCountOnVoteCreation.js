@@ -1,3 +1,5 @@
+// @ts-check
+
 import { fromEvent } from 'graphcool-lib'
 import {
   VOTE_COUNT_TO_DELETE_POST,
