@@ -1,3 +1,5 @@
+// @ts-check
+
 // For more info, visit https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
