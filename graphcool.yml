@@ -99,7 +99,7 @@ permissions:
     # Allows access to User from Post
     # Only the username field is made queryable. This means
     # that malicious users cannot query for someones elses
-    # infomation such as their password, id, or email.
+    # information such as their password, id, or email.
   - operation: User.read  
     fields: [username]
 
