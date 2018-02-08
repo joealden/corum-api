@@ -31,6 +31,8 @@ export default async event => {
   const api = graphcool.api('simple/v1')
 
   try {
+    // TODO: Merge postIdFromVoteQuery and currentPostVoteCount into a single query
+
     const { Vote } = await makeRequest(api, postIdFromVoteQuery, { voteId })
     const postId = Vote.post.id
 

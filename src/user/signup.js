@@ -5,6 +5,7 @@ import * as bcryptjs from 'bcryptjs'
 import * as validator from 'validator'
 import { makeRequest } from '../../utils/common'
 
+// TODO: Remove the password field as it isn't needed?
 const userQuery = `
   query UserQuery($email: String!, $username: String!) {
     allUsers(filter: { OR: [{ email: $email }, { username: $username }] }) {
