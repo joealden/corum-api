@@ -21,9 +21,6 @@ module.exports = {
   */
   extends: ['prettier', 'standard'],
 
-  // required to lint *.vue files
-  plugins: ['html'],
-
   // Custom rules (Basically remove the rules from standard I don't like)
   rules: {
     semi: 'off',
