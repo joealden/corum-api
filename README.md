@@ -1,6 +1,8 @@
 <h1 align="center">Corum API</h1>
 <p align="center">The API for Corum built using the Graphcool Framework.</p>
 
+![corum-api screenshot](.github/screenshot.png)
+
 ## Corum's Client Codebase
 
 To find out more about how this API in particular works, visit the main
