@@ -1,6 +1,5 @@
-# corum-api
-
-The API for Corum built using the Graphcool Framework.
+<h1 align="center">Corum API</h1>
+<p align="center">The API for Corum built using the Graphcool Framework.</p>
 
 ## Corum's Client Codebase
 
